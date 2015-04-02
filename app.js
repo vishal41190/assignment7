@@ -2,13 +2,14 @@ var express = require('express');
 var http= require('http');
 var path = require('path');
 var redis= require('redis');
-
+var bodyParser = require('body-parser');
 var app = express();
 
 client = redis.createClient();
 
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 http.createServer(app).listen(3000);
 
 client.on("error",function(err){
@@ -23,8 +24,13 @@ var islongUrlExist= function(longurl,callback){
         }); 
 };
 
-app.get('/getUrl',function(req,res){
-    var url = req.query.url;
+function generateSortUrl(){
+    var temp = Date.now();
+    return(temp.toString(36));
+    
+}
+app.post('/getUrl',function(req,res){
+    var url = req.body.url1;
     var index = url.indexOf("localhost:3000");
     if(index>-1 && index<8)
     {
@@ -41,7 +47,8 @@ app.get('/getUrl',function(req,res){
             {
                 //LongUrl not yet exist
                 //create new url 
-                var sorturl ="localhost:3000/sorturl3";
+                var sorturl = generateSortUrl();
+                sorturl="localhost:3000/"+sorturl;
                 client.hset(url,"sorturl",sorturl,redis.print);
                 client.hset(sorturl,"longurl",url,redis.print);
                 client.zadd("views",1,sorturl,redis.print);
