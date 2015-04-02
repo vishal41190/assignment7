@@ -19,7 +19,7 @@ $(document).ready(function(){
         .done(function (data,status){
         
             $('#result').html("");
-            $('#result').append(data.url);
+            $('#result').append("<a href="+data.url+">"+data.url+"</a>");
                   
                
         })
