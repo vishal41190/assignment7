@@ -70,7 +70,7 @@ app.post('/getUrl', function(req, res) {
 });
 app.get('/gettop', function(req, res) {
 
-    client.zrevrangebyscore("views", "+inf", 0, "limit", 0, 9, function(err, response) {
+    client.zrevrangebyscore("views", "+inf", 0, "limit", 0, 10, function(err, response) {
         res.json({
             "top": response
         });
