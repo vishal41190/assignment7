@@ -43,11 +43,13 @@ $(document).ready(function() {
         })
         .done(function(data, status) {
             var i = 0;
-            
+            $(".popular").append("<table>");
+            $(".popular").append("<tr><th>Long Url</th><th>Visits</th></tr>");
             for (i = 0; i < data.top.length; i++) {
-                $(".popular").append("<a href=" + data.top[i] + ">" + data.top[i] + "</a><br>");
+                $(".popular").append("<tr><td><a href=" + data.top[i] + ">" + data.top[i] + "</a></td><td>"+data.top[i+1]+"</td></tr>");
+                i++;
             }
-
+            $(".popular").append("</table>");
 
 
         })

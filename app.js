@@ -52,7 +52,7 @@ app.post('/getUrl', function(req, res) {
                 sorturl = "localhost:3000/" + sorturl;
                 client.hset(url, "sorturl", sorturl, redis.print);
                 client.hset(sorturl, "longurl", url, redis.print);
-                client.zincrby("views", 1, sorturl, redis.print);
+                client.zincrby("views", 1, url, redis.print);
                 res.json({
                     "url": sorturl
                 });
@@ -70,7 +70,7 @@ app.post('/getUrl', function(req, res) {
 });
 app.get('/gettop', function(req, res) {
 
-    client.zrevrangebyscore("views", "+inf", 0, "limit", 0, 10, function(err, response) {
+    client.zrevrangebyscore("views", "+inf", 0,"withscores", "limit", 0, 10, function(err, response) {
         res.json({
             "top": response
         });
@@ -80,11 +80,12 @@ app.get('/gettop', function(req, res) {
 app.get('/:url', function(req, res) {
     var url = req.params.url;
     url = "localhost:3000/" + url;
+   
     client.hget(url, "longurl", function(err, response) {
         if (response === null) {
             res.status(404).send("Url not exist");
         } else {
-            client.zincrby("views", 1, url, redis.print);
+            client.zincrby("views", 1, response, redis.print);
             res.redirect(response);
         }
     });
