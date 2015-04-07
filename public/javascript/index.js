@@ -43,7 +43,7 @@ $(document).ready(function() {
         })
         .done(function(data, status) {
             var i = 0;
-            console.log(data.top.length);
+            
             for (i = 0; i < data.top.length; i++) {
                 $(".popular").append("<a href=" + data.top[i] + ">" + data.top[i] + "</a><br>");
             }
